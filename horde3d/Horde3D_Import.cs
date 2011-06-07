@@ -63,7 +63,7 @@ namespace Horde3DNET
         internal static extern IntPtr h3dGetMessage(out int level, out float time);
 
         [DllImport("__Internal"), SuppressUnmanagedCodeSecurity]
-        internal static extern float h3dGetOption(h3d.H3DOptions param);
+        internal static extern float h3dGetOption(H3d.H3DOptions param);
 
 
         [DllImport("__Internal"), SuppressUnmanagedCodeSecurity]
@@ -167,7 +167,7 @@ namespace Horde3DNET
         
         // --- Scene graph functions ---
         [DllImport("__Internal"), SuppressUnmanagedCodeSecurity]
-        internal static extern h3d.H3DNodeTypes h3dGetNodeType(int node);        
+        internal static extern H3d.H3DNodeTypes h3dGetNodeType(int node);        
 
         [DllImport("__Internal"), SuppressUnmanagedCodeSecurity]
         internal static extern int h3dGetNodeParent(int node);

@@ -42,10 +42,10 @@ namespace Horde3DNET.Utils
 
         // Utilities
         [DllImport("__Internal"), SuppressUnmanagedCodeSecurity]
-        internal static extern IntPtr h3dutGetResourcePath(h3d.H3DResTypes type);
+        internal static extern IntPtr h3dutGetResourcePath(H3d.H3DResTypes type);
 
         [DllImport("__Internal"), SuppressUnmanagedCodeSecurity]
-        internal static extern void h3dutSetResourcePath(h3d.H3DResTypes type, string path);
+        internal static extern void h3dutSetResourcePath(H3d.H3DResTypes type, string path);
              
 
         [DllImport("__Internal"), SuppressUnmanagedCodeSecurity]

@@ -72,7 +72,7 @@ namespace Horde3DNET.Utils
         /// </summary>
         /// <param name="type">type of resource</param>
         /// <returns>the search path string</returns>
-        public static string getResourcePath(h3d.H3DResTypes type)
+        public static string getResourcePath(H3d.H3DResTypes type)
         {
             IntPtr ptr = NativeMethodsUtils.h3dutGetResourcePath(type);
             return Marshal.PtrToStringAnsi(ptr);
@@ -84,7 +84,7 @@ namespace Horde3DNET.Utils
         /// </summary>
         /// <param name="type">type of resource</param>
         /// <param name="path">path where the resources can be found (without slash or backslash at the end)</param>
-        public static void setResourcePath(h3d.H3DResTypes type, string path)
+        public static void setResourcePath(H3d.H3DResTypes type, string path)
         {
             if (path == null) throw new ArgumentNullException("path", Resources.StringNullExceptionString);
 

@@ -18,7 +18,7 @@ using Horde3DNET.Properties;
 
 namespace Horde3DNET
 {
-    public static class h3d
+    public static class H3d
     {
         // Predefined constants
         private static int _rootNode = 1;
