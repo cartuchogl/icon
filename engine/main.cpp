@@ -16,6 +16,10 @@ static void fire(MonoDomain *domain, MonoAssembly *assembly, const char *event,c
 
   MonoClass *klass=
   mono_class_from_name (i, "GameEngine", "CoreEvents");
+  if(klass==NULL){
+    printf("not found class\n");
+    return;
+  }
 
   MonoMethodDesc* mdesc;
   MonoMethod *vtmethod;
@@ -23,8 +27,12 @@ static void fire(MonoDomain *domain, MonoAssembly *assembly, const char *event,c
   MonoObject *exception;
 
   /* A different way to search for a method */
-  mdesc = mono_method_desc_new (":fireEvent(string,string)", 1);
+  mdesc = mono_method_desc_new (":fireEvent(string,string)", 0);
   vtmethod = mono_method_desc_search_in_class (mdesc, klass);
+  if(vtmethod==NULL){
+    printf("not found method\n");
+    return;
+  }
   void* args [2];
   str = mono_string_new (domain, event);
   args[0] = str;
@@ -156,8 +164,8 @@ int main(int argc, char* argv[]) {
 
   bool running = true;
 
-  if (argc < 2) {
-    fprintf (stderr, "Please provide an assembly to load\n");
+  if (argc < 3) {
+    fprintf (stderr, "Please provide two assemblies to load, one with Main and other with GameEngine\n");
     return 1;
   }
   file = argv [1];
@@ -180,33 +188,40 @@ int main(int argc, char* argv[]) {
     return 0;
   }
 
-  MonoAssembly *assembly = main_function (domain, file, argc - 1, argv + 1);
+  main_function (domain, file, argc - 1, argv + 1);
+  MonoAssembly *assembly2;
+
+  assembly2 = mono_domain_assembly_open (domain, argv[2]);
+  if (!assembly2)
+    exit (2);
+  
 
   h3dInit();
-  fire(domain,assembly,"onpostinit","");
+  fire(domain,assembly2,"onpostinit","");
   // Our While loop
   while(running == true) {
-    fire(domain,assembly,"onframe","");
-    running = check_events(domain,assembly);
+    fire(domain,assembly2,"onframe","");
+    running = check_events(domain,assembly2);
     if(global_quit) {
       running = false;
     }
     //Swaps the sdl opengl buffers
     SDL_GL_SwapBuffers();
-    fire(domain,assembly,"onendframe","");
+    fire(domain,assembly2,"onendframe","");
   }
 
-  fire(domain,assembly,"onend","");
+  fire(domain,assembly2,"onend","");
   SDL_Delay(200);
   //Releases the Horde3D Engine
   h3dRelease();
-
+  // FIXME: crash on exit when using ironruby
+  printf("xxxxxx\n");
   mono_jit_cleanup (domain);
-
+  printf("xxxxxx\n");
   SDL_Quit();
   SDL_Delay(500);
-
+  printf("xxxxxx\n");
   retval = mono_environment_exitcode_get ();
-
+  printf("xxxxxx\n");
   return retval;
 }

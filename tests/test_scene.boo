@@ -1,13 +1,14 @@
 namespace GameEngine
 
 import System
+import Horde3DNET.Utils
 
-Platform.methods.setWindow("test scene",640,480,0)
+Platform.Methods.setWindow("test scene",640,480,0)
 
 scene as Scene
 
-CoreEvents.onpostinit += def(obj,args):
-  Console.WriteLine(Horde3DNET.h3d.getVersionString())
+CoreEvents.onpostinit += def(obj):
+  Console.WriteLine(Horde3DNET.H3d.getVersionString())
   scene = Scene()
   scene.load({
     'Material' : {
@@ -33,18 +34,27 @@ CoreEvents.onpostinit += def(obj,args):
   sky.sz = 210
   sky.update()
   
-CoreEvents.onframe += def(obj,args):
+CoreEvents.onframe += def(obj):
   scene.render()
 
 CoreEvents.onkeydown += def(obj,args):
   s = "onkeydown -> state:{0}, scancode:{1}, unicode:{2}, sym:{3}, mod:{4}"
   print s % (args['state'], args['scancode'], args['unicode'], args['sym'], args['mod'])
+  if args['scancode'] == 13:
+    scene.camera.moveForward(5)
+  if args['scancode'] == 1:
+    scene.camera.moveBackward(5)
+  if args['scancode'] == 0:
+    scene.camera.strafeLeft(5)
+  if args['scancode'] == 2:
+    scene.camera.strafeRight(5)
+  scene.camera.update()
 
 CoreEvents.onkeyup += def(obj,args):
   s = "onkeyup -> state:{0}, scancode:{1}, unicode:{2}, sym:{3}, mod:{4}"
   print s % (args['state'], args['scancode'], args['unicode'], args['sym'], args['mod'])
   if args['scancode'] == 53:
-    Platform.methods.quit()
+    Platform.Methods.quit()
 
 CoreEvents.onmousedown += def(obj,args):
   s = "onmousedown -> x:{0}, y:{1}, state: {2}, button: {3}"
@@ -54,6 +64,21 @@ CoreEvents.onmouseup += def(obj,args):
   s = "onmouseup -> x:{0}, y:{1}, state: {2}, button: {3}"
   print s % (args['x'], args['y'], args['state'], args['button'])
 
-CoreEvents.onend += def(obj,args):
+CoreEvents.onend += def(obj):
+  Horde3DUtils.dumpMessages()
   print "onend"
+
+kkk = 0
+
+CoreEvents.onmousemove += def(obj,args):
+  s = "onmousemove -> x:{0}, y:{1}, xrel:{2}, yrel:{3}"
+  print s % (args['x'],args['y'],args['xrel'],args['yrel'])
+  if kkk==0:
+    kkk=1
+  else:
+    scene.camera.debug()
+    scene.camera.rx -= int.Parse(args['yrel'].ToString())/2
+    scene.camera.ry -= int.Parse(args['xrel'].ToString())/2
+    scene.camera.update()
+    scene.camera.debug()
 

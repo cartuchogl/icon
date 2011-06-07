@@ -12,7 +12,7 @@ namespace Platform
     internal static extern void quit();
   }
   
-  public static class methods {
+  public static class Methods {
     public static int setWindow(string caption,int width,int height,int fullscreen){
       return NativeMethods.setWindow(caption,width,height,fullscreen);
     }

@@ -2,10 +2,10 @@ namespace GameEngine
 
 import System
 
-Platform.methods.setWindow("test events",640,480,0)
+Platform.Methods.setWindow("test events",640,480,0)
 
-CoreEvents.onpostinit += def(obj,args):
-  Console.WriteLine(Horde3DNET.h3d.getVersionString())
+CoreEvents.onpostinit += def(obj):
+  Console.WriteLine(Horde3DNET.H3d.getVersionString())
 
 CoreEvents.onkeydown += def(obj,args):
   s = "onkeydown -> state:{0}, scancode:{1}, unicode:{2}, sym:{3}, mod:{4}"
@@ -30,14 +30,14 @@ CoreEvents.onmousemove += def(obj,args):
 acum = 0
 frames = 0
 
-CoreEvents.onframe += def(obj,args):
+CoreEvents.onframe += def(obj):
   acum += 1
   frames += 1
   print "frame ${frames}" if acum>1000
 
-CoreEvents.onendframe += def(obj,args):
+CoreEvents.onendframe += def(obj):
   acum = 0 if acum>1000
 
-CoreEvents.onend += def(obj,args):
+CoreEvents.onend += def(obj):
   print "onend"
 
