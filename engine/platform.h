@@ -151,6 +151,8 @@ int getHeight(void);
 int getTime(void);
 void quit(void);
 void reset(void);
+const char *getPlatform(void);
+const char *getCpuFlags(void);
 }
 
 #endif

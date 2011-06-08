@@ -24,7 +24,18 @@ CoreEvents.onpostinit += def(obj):
       "pipelines/deferred.pipeline.xml",
       "pipelines/hdr.pipeline.xml",
       "pipelines/custom.pipeline.xml"
-    )
+    ),
+    'Camera' : {
+      'tx' : '59',
+      'ty' : '11',
+      'tz' : '-51',
+      'rx' : '-20',
+      'ry' : '135',
+      'rz' : '0',
+      'sx' : '1',
+      'sy' : '1',
+      'sz' : '1'
+    }
   })
   scene.loadFull("./content")
   scene.addNode("env").update()

@@ -196,8 +196,10 @@ int main(int argc, char* argv[]) {
     exit (2);
   
 
-  h3dInit();
-  fire(domain,assembly2,"onpostinit","");
+  if(h3dInit())
+    fire(domain,assembly2,"onpostinit","");
+  else
+    fire(domain,assembly2,"ondirtyinit","");
   // Our While loop
   while(running == true) {
     fire(domain,assembly2,"onframe","");

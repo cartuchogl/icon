@@ -1,0 +1,4 @@
+width: 640
+height: 480
+fullscreen: 0
+window_title: "iCon alpha demo (ruby=>c++=>CLR=>DLR=>ruby)"

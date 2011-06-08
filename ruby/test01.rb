@@ -2,56 +2,61 @@ require 'bin/engine.dll'
 require 'bin/game_engine.dll'
 include GameEngine
 include Horde3DNET
+require 'yaml'
+require 'ruby/aux.rb'
 
-def kk(hash)
-  retval = System::Collections::Hashtable.new
-  hash.each do |k,v|
-    retval.Add(k.to_s.to_clr_string,v.to_s.to_clr_string)
-  end
-  retval
-end
+conf = YAML::load( File.read("ruby/config.yml") )
+scene_load = YAML::load( File.read("ruby/scene01.yml") )
+puts scene_load
 
-def kkk(ary)
-  System::Array[System::String].new(ary.map { |s| s.to_s.to_clr_string })
-end
-
-Platform::Methods.setWindow("ruby -> c++ -> CLR -> csharp -> DLR -> ruby",640,480,0)
+Platform::Methods.setWindow(
+  conf['window_title'],
+  conf['width'], conf['height'],
+  conf['fullscreen']
+)
 
 scene = Scene.new
+dirty = false
 
-CoreEvents.onpostinit {|i| puts H3d.getVersionString }
 CoreEvents.onpostinit do |i|
-  tmp = System::Collections::Hashtable.new
-  tmp.Add('Material'.to_clr_string,kk({
-    'font' => "overlays/font.material.xml",
-    'light' => "materials/light.material.xml"
-  }))
-  tmp.Add('SceneGraph'.to_clr_string,kk({
-    'skyBox' => "models/skybox/skybox.scene.xml",
-    'env' => "environments/001.scene.xml"
-  }))
-  tmp.Add('Pipeline'.to_clr_string,kkk([
-    "pipelines/forward.pipeline.xml",
-    "pipelines/deferred.pipeline.xml",
-    "pipelines/hdr.pipeline.xml",
-    "pipelines/custom.pipeline.xml"
-  ]))
-  scene.load(
-    tmp
-  )
-  scene.loadFull("./content")
-  scene.addNode("skyBox").update
+  puts H3d.getVersionString
+  puts Platform::Methods.getPlatform
+  puts Platform::Methods.getCpuFlags
+end
+CoreEvents.onpostinit do |i|
+  scene.load( convert_load( scene_load ) )
+  scene.loadFull "./content"
+  sky = scene.addNode "skyBox"
+  sky.sx = 210
+  sky.sy = 50
+  sky.sz = 210
+  sky.update
   scene.addNode("env").update
 end
-
-def pformat(evt,hash)
-  puts "#{evt} -> "+hash.keys.map{|k| "#{k}:#{hash[k]}"}.join(",")
+CoreEvents.ondirtyinit {|i| dirty = true }
+CoreEvents.onkeydown do |obj,args|
+  pformat("onkeydown",args)
+  unless dirty
+    if args['scancode'] == 13 then
+      scene.camera.moveForward(5)
+    elsif args['scancode'] == 1 then
+      scene.camera.moveBackward(5)
+    elsif args['scancode'] == 0 then
+      scene.camera.strafeLeft(5)
+    elsif args['scancode'] == 2 then
+      scene.camera.strafeRight(5)
+    end
+    scene.camera.update()
+  end
 end
-
-CoreEvents.onkeydown {|obj,args| pformat("onkeydown",args) }
-CoreEvents.onkeyup {|obj,args| pformat("onkeyup",args) }
-CoreEvents.onmousedown {|obj,args| pformat("onmousedown",args) }
-CoreEvents.onmouseup {|obj,args| pformat("onmouseup",args) }
-CoreEvents.onmousemove {|obj,args| pformat("onmousemove",args) }
-CoreEvents.onframe {|i| scene.render }
-CoreEvents.onend {|i| puts "onend" }
+CoreEvents.onkeyup do |obj,args|
+  pformat("onkeyup",args)
+  if args['scancode']==53 then
+    Platform::Methods.quit()
+  end
+end
+CoreEvents.onmousedown { |obj,args| pformat( "onmousedown", args ) }
+CoreEvents.onmouseup { |obj,args| pformat( "onmouseup", args ) }
+CoreEvents.onmousemove { |obj,args| pformat( "onmousemove", args ) }
+CoreEvents.onframe { |i| scene.render }
+CoreEvents.onend { |i| puts "onend" }

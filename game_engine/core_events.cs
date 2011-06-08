@@ -7,6 +7,7 @@ namespace GameEngine {
   
   public class CoreEvents {
     public static event CoreEvent onpostinit;
+    public static event CoreEvent ondirtyinit;
     public static event CoreEvent onframe;
     public static event CoreEvent onendframe;
     public static event CoreEvent onend;
@@ -29,6 +30,9 @@ namespace GameEngine {
         switch(str) {
           case "onpostinit":
             if(CoreEvents.onpostinit!=null) CoreEvents.onpostinit(null);
+            break;
+          case "ondirtyinit":
+            if(CoreEvents.ondirtyinit!=null) CoreEvents.ondirtyinit(null);
             break;
           case "onframe":
             if(CoreEvents.onframe!=null) CoreEvents.onframe(null);
