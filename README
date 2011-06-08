@@ -1,0 +1,47 @@
+Name: icon engine
+  Try to build a flexible and powefull 3d game engine to build amazing games :D
+
+License:
+  MIT
+
+Version:
+  0.1
+
+Copyright:
+  Copyright (c) 2011 [Carlos Bolaños aka cartuchogl](http://urbin.es).
+
+Inspiration:
+  - blendelf https://github.com/centralnoise/BlendELF
+  - udk http://www.udk.com/
+  - unity3d http://unity3d.com/unity/
+  - love http://love2d.org/
+  - ruby http://www.ruby-lang.org/
+
+Dependencies:
+  - mono http://mono-project.com/Main_Page
+  - horde3d http://www.horde3d.org/
+  - sdl http://www.libsdl.org/
+  - OpenGL 2.0 capable graphics hardware (you don't have glsl, you don't have graphics)
+  
+Compilation:
+  MacOSX:
+    Download horde3d fron svn and build it.
+    Download mono and install it.
+    Use macport to build libsdl as universal (sudo macport install libsdl +universal)
+    
+    Revisa el archivo Rakefile para comprobar que las rutas son correctas
+    rake copy_needed # para copiar el motor de scripting desde mono
+    rake all # para compilar el motor y los tests
+    Ahora necesitas datos, hay un paquete que puedes descomprimir en el raiz en 
+    [http://e-seanetwork.com/content.zip]
+    puedes ejecutar los tests usando desde el raiz
+    ./bin/icon bin/test_[ruby|events|scene|events_csharp].exe bin/game_engine.dll
+    
+  Linux:
+    Todo
+    
+  Windows:
+    Todo
+
+Notes:
+  - On test_ruby the ruby code are just in time compiled usind DLR
