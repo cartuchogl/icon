@@ -33,7 +33,7 @@ Compilation:
     rake copy_needed # para copiar el motor de scripting desde mono
     rake all # para compilar el motor y los tests
     Ahora necesitas datos, hay un paquete que puedes descomprimir en el raiz en 
-    [http://e-seanetwork.com/content.zip]
+    [https://github.com/downloads/cartuchogl/icon/content.zip]
     puedes ejecutar los tests usando desde el raiz
     ./bin/icon bin/test_[ruby|events|scene|events_csharp].exe bin/game_engine.dll
     
