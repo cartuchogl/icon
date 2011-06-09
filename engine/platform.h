@@ -3,6 +3,8 @@
 
 #include <SDL.h>
 
+#include "definitions.h"
+
 struct Keyboard
 {
 	enum List
@@ -144,15 +146,15 @@ struct Keyboard
 };
 
 extern "C" {
-void setWindowTitle(char *caption);
-int setWindow(char *caption,int width,int height,int fullscreen);
-int getWidth(void);
-int getHeight(void);
-int getTime(void);
-void quit(void);
-void reset(void);
-const char *getPlatform(void);
-const char *getCpuFlags(void);
+CALL_API void setWindowTitle(char *caption);
+CALL_API int setWindow(char *caption,int width,int height,int fullscreen);
+CALL_API int getWidth(void);
+CALL_API int getHeight(void);
+CALL_API int getTime(void);
+CALL_API void quit(void);
+CALL_API void reset(void);
+CALL_API const char *getPlatform(void);
+CALL_API const char *getCpuFlags(void);
 }
 
 #endif

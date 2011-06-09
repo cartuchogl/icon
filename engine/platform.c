@@ -1,18 +1,21 @@
 #include <SDL.h>
 #include <SDL_cpuinfo.h>
 
-void setWindowTitle(char *caption) {
+#include "definitions.h"
+
+CALL_API void setWindowTitle(char *caption) {
 	//Sets are window Caption
   SDL_WM_SetCaption(caption,NULL);
 }
 
 SDL_Surface *surface;
 
-int setWindow(char *caption,int width,int height,int fullscreen) {
+CALL_API int setWindow(char *caption,int width,int height,int fullscreen) {
+  Uint32 flags = SDL_OPENGL;
+  
 	setWindowTitle(caption);
 
   //Sets the sdl video mode width and height as well has creates are opengl context.
-	Uint32 flags = SDL_OPENGL;
 	if(fullscreen!=0) {
 		flags = SDL_OPENGL|SDL_FULLSCREEN;
 	}
@@ -24,31 +27,31 @@ int setWindow(char *caption,int width,int height,int fullscreen) {
 	return 1;
 }
 
-int getWidth(void) {
+CALL_API int getWidth(void) {
 	return surface ? surface->w : -1;
 }
 
-int getHeight(void) {
+CALL_API int getHeight(void) {
 	return surface ? surface->h : -1;
 }
 
-int getTime(void) {
+CALL_API int getTime(void) {
 	return SDL_GetTicks();
 }
 
 int global_quit = 0;
 
-void quit(void) {
+CALL_API void quit(void) {
 	global_quit = 1;
 }
 
 int global_reseting = 1;
 
-void reset(void) {
+CALL_API void reset(void) {
 	global_reseting = 1;
 }
 
-const char *getPlatform(void) {
+CALL_API const char *getPlatform(void) {
   #if __AIX__
       return "AIX";
   #elif __HAIKU__
@@ -103,7 +106,7 @@ const char *getPlatform(void) {
   #endif
 }
 
-const char *getCpuFlags(void) {
+CALL_API const char *getCpuFlags(void) {
   char *cad=malloc(1024);
   sprintf(cad,
     "{'3DNow':%d,'AltiVec':%d,'MMX':%d,'RDTSC':%d,'SSE':%d,'SSE2':%d}",

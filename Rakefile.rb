@@ -28,7 +28,7 @@ GAME_ENGINE = "-r:bin/engine.dll,bin/game_engine.dll"
 desc "Build engine"
 task :default => ["bin/icon"]
 
-SRC = FileList['engine/*.c','engine/*.cpp','engine/*.h']
+SRC = FileList['engine/*.c','engine/*.cpp']
 OBJ = SRC.ext('o')
 
 rule '.o' => '.c' do |t|

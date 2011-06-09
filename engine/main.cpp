@@ -9,7 +9,7 @@
 #include <Horde3DUtils.h>
 #include <SDL.h>
 
-extern int global_quit;
+extern "C" int global_quit;
 
 static void fire(MonoDomain *domain, MonoAssembly *assembly, const char *event,const char *arg) {
   MonoImage *i = mono_assembly_get_image(assembly);
@@ -169,6 +169,10 @@ int main(int argc, char* argv[]) {
     return 1;
   }
   file = argv [1];
+  
+  #ifdef _MONO_PATH
+  mono_set_dirs(_MONO_PATH_LIB,_MONO_PATH_ETC);
+  #endif
 
   /*
   * Load the default Mono configuration file, this is needed
