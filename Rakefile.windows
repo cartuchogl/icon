@@ -53,7 +53,7 @@ file "bin\\icon.exe" => OBJ do
   kk = OBJ.uniq.to_s.gsub("/","\\")
   puts kk
   puts "kkkkkkk"
-  sh "#{GPP} #{kk} #{SDL_LIBS} #{H3DLIB} #{H3DUTLIB} #{MONOLIB} /MD /link /SUBSYSTEM:CONSOLE"
+  sh "#{GPP} #{kk} #{SDL_LIBS} #{H3DLIB} #{H3DUTLIB} #{MONOLIB} /MD /link /SUBSYSTEM:CONSOLE /out:bin\\icon.exe"
 end
   
 # File dependencies go here ...
