@@ -4,9 +4,10 @@ CLEAN.include('engine/*.o','bin/icon')
 CLOBBER.include('bin/icon')
 
 MSVC = "/DWIN32 /Gm /RTC1 /nologo /EHsc /MD /D_WIN32 /DUNICODE /D_UNICODE /Zi"
+MONO_WIN = "/D_MONO_PATH"
 
-GCC = "cl.exe #{MSVC}"
-GPP = "cl.exe #{MSVC}"
+GCC = "cl.exe #{MSVC} #{MONO_WIN}"
+GPP = "cl.exe #{MSVC} #{MONO_WIN}"
 
 H3D = "..\\Horde3D_SDK_1.0.0_Beta5\\Horde3D"
 HORDE3D = "/I#{H3D}\\Bindings\\C++"
@@ -36,7 +37,7 @@ GAME_ENGINE = "-r:bin/engine.dll,bin/game_engine.dll"
 desc "Build engine"
 task :default => ["bin\\icon.exe"]
 
-SRC = FileList['engine/*.c','engine/*.cpp','engine/*.h']
+SRC = FileList['engine/*.c','engine/*.cpp']
 OBJ = SRC.ext('o')
 
 rule '.o' => '.c' do |t|

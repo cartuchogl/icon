@@ -9,6 +9,8 @@
 #include <Horde3DUtils.h>
 #include <SDL.h>
 
+#include "definitions.h"
+
 extern "C" int global_quit;
 
 static void fire(MonoDomain *domain, MonoAssembly *assembly, const char *event,const char *arg) {
