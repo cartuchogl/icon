@@ -3,7 +3,7 @@ require 'bin/game_engine.dll'
 include GameEngine
 include Horde3DNET
 require 'yaml'
-require 'ruby/aux.rb'
+require 'ruby/helpers.rb'
 
 conf = YAML::load( File.read("ruby/config.yml") )
 scene_load = YAML::load( File.read("ruby/scene01.yml") )
