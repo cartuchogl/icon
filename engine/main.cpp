@@ -13,8 +13,13 @@
 
 extern "C" int global_quit;
 
-static void fire(MonoDomain *domain, MonoAssembly *assembly, const char *event,const char *arg) {
-  MonoImage *i = mono_assembly_get_image(assembly);
+struct mono_data {
+  MonoDomain *domain;
+  MonoAssembly *assembly;
+};
+
+static void fire(mono_data dotnet, const char *event,const char *arg) {
+  MonoImage *i = mono_assembly_get_image(dotnet.assembly);
 
   MonoClass *klass=
   mono_class_from_name (i, "GameEngine", "CoreEvents");
@@ -36,9 +41,9 @@ static void fire(MonoDomain *domain, MonoAssembly *assembly, const char *event,c
     return;
   }
   void* args [2];
-  str = mono_string_new (domain, event);
+  str = mono_string_new (dotnet.domain, event);
   args[0] = str;
-  args[1] = mono_string_new(domain,arg);
+  args[1] = mono_string_new(dotnet.domain,arg);
   exception = NULL;
   mono_runtime_invoke (vtmethod, NULL, args, &exception);
   if(exception){
@@ -52,7 +57,7 @@ int acum_xrel = 0;
 int acum_yrel = 0;
 int acum = 0; 
 
-void handle_mouse_event(SDL_Event *event,const char *type,MonoDomain *domain, MonoAssembly *assembly) {
+void handle_mouse_event(SDL_Event *event,const char *type) {
   acum = 1;
   acum_x = event->motion.x;
   acum_y = event->motion.y;
@@ -60,7 +65,7 @@ void handle_mouse_event(SDL_Event *event,const char *type,MonoDomain *domain, Mo
   acum_yrel += event->motion.yrel;
 }
 
-void fire_mouseacum(MonoDomain *domain, MonoAssembly *assembly) {
+void fire_mouseacum(mono_data dotnet) {
   char cad[1024];
   sprintf(cad,"{'x':%d,'y':%d,'xrel':%d,'yrel':%d}",
     acum_x,
@@ -68,7 +73,7 @@ void fire_mouseacum(MonoDomain *domain, MonoAssembly *assembly) {
     acum_xrel,
     acum_yrel
   );
-  fire(domain,assembly,"onmousemove",cad);
+  fire(dotnet,"onmousemove",cad);
   acum_x = 0;
   acum_y = 0;
   acum_xrel = 0;
@@ -76,7 +81,7 @@ void fire_mouseacum(MonoDomain *domain, MonoAssembly *assembly) {
   acum = 0;
 }
 
-void handle_mousebutton_event (SDL_Event *event, const char *type, MonoDomain *domain, MonoAssembly *assembly) {
+void handle_mousebutton_event (SDL_Event *event, const char *type, mono_data dotnet) {
   char cad[1024];
   sprintf(cad,"{'x':%d,'y':%d,'state':%d,'button':%d}",
     event->button.x,
@@ -84,10 +89,10 @@ void handle_mousebutton_event (SDL_Event *event, const char *type, MonoDomain *d
     event->button.state,
     event->button.button
   );
-  fire(domain,assembly,type,cad);
+  fire(dotnet,type,cad);
 }
 
-void handle_keyboard_event (SDL_Event *event, const char *type, MonoDomain *domain, MonoAssembly *assembly) {
+void handle_keyboard_event (SDL_Event *event, const char *type, mono_data dotnet) {
   char cad[1024];
   sprintf(cad,"{'state':%d,'scancode':%d,'unicode':%d,'sym':%d,'mod':%d}",
     event->key.state,
@@ -96,10 +101,10 @@ void handle_keyboard_event (SDL_Event *event, const char *type, MonoDomain *doma
     event->key.keysym.sym,
     event->key.keysym.mod
   );
-  fire(domain,assembly,type,cad);
+  fire(dotnet,type,cad);
 }
 
-bool check_events (MonoDomain *domain, MonoAssembly *assembly) {
+bool check_events (mono_data dotnet) {
   //Creates Our Event Reciver
   SDL_Event event;
   //Checks if there is a event that needs processing
@@ -108,15 +113,15 @@ bool check_events (MonoDomain *domain, MonoAssembly *assembly) {
       case SDL_QUIT:
         return false;
       case SDL_KEYDOWN:
-        handle_keyboard_event (&event, "onkeydown", domain, assembly); break;
+        handle_keyboard_event (&event, "onkeydown", dotnet); break;
       case SDL_KEYUP:
-        handle_keyboard_event (&event, "onkeyup", domain, assembly); break;
+        handle_keyboard_event (&event, "onkeyup", dotnet); break;
       case SDL_MOUSEMOTION:
-        handle_mouse_event (&event, "onmousemove", domain, assembly); break;
+        handle_mouse_event (&event, "onmousemove"); break;
       case SDL_MOUSEBUTTONDOWN:
-        handle_mousebutton_event (&event, "onmousedown", domain, assembly); break;
+        handle_mousebutton_event (&event, "onmousedown", dotnet); break;
       case SDL_MOUSEBUTTONUP:
-        handle_mousebutton_event (&event, "onmouseup", domain, assembly); break;
+        handle_mousebutton_event (&event, "onmouseup", dotnet); break;
       case SDL_JOYAXISMOTION:
       case SDL_JOYHATMOTION:
       case SDL_JOYBALLMOTION:
@@ -128,7 +133,7 @@ bool check_events (MonoDomain *domain, MonoAssembly *assembly) {
     }
   }
   if(acum) {
-    fire_mouseacum (domain, assembly);
+    fire_mouseacum (dotnet);
   }
   return true;
 }
@@ -188,7 +193,7 @@ int main(int argc, char* argv[]) {
   */
   domain = mono_jit_init (file);
 
-  //Inits sdl with only the video extention.
+  // Inits sdl with only the video extension.
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     printf("SDL_Init failed: %s\n", SDL_GetError());
     return 0;
@@ -201,24 +206,26 @@ int main(int argc, char* argv[]) {
   if (!assembly2)
     exit (2);
   
-
+  mono_data dotnet;
+  dotnet.domain = domain;
+  dotnet.assembly = assembly2;
   if(h3dInit())
-    fire(domain,assembly2,"onpostinit","");
+    fire(dotnet,"onpostinit","");
   else
-    fire(domain,assembly2,"ondirtyinit","");
+    fire(dotnet,"ondirtyinit","");
   // Our While loop
   while(running == true) {
-    fire(domain,assembly2,"onframe","");
-    running = check_events(domain,assembly2);
+    fire(dotnet,"onframe","");
+    running = check_events(dotnet);
     if(global_quit) {
       running = false;
     }
     //Swaps the sdl opengl buffers
     SDL_GL_SwapBuffers();
-    fire(domain,assembly2,"onendframe","");
+    fire(dotnet,"onendframe","");
   }
 
-  fire(domain,assembly2,"onend","");
+  fire(dotnet,"onend","");
   SDL_Delay(200);
   //Releases the Horde3D Engine
   h3dRelease();
