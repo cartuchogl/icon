@@ -4,6 +4,7 @@ using System.Collections;
 namespace GameEngine {
   public delegate void CoreEvent(object caller);
   public delegate void CoreEventData(object caller, Hashtable arguments);
+  public delegate void CallerLater();
   
   public class CoreEvents {
     public static event CoreEvent onpostinit;
@@ -19,7 +20,9 @@ namespace GameEngine {
     
     private static Boo.Lang.Interpreter.InteractiveInterpreter interpreter;
     
-    public static void fireEvent(string str,string args) {
+    public static event CallerLater callLater;
+    
+    public static int fireEvent(string str,string args) {
       try {
         if(interpreter==null) {
           interpreter = new Boo.Lang.Interpreter.InteractiveInterpreter();
@@ -36,6 +39,10 @@ namespace GameEngine {
             break;
           case "onframe":
             if(CoreEvents.onframe!=null) CoreEvents.onframe(null);
+            if(CoreEvents.callLater!=null) {
+              CoreEvents.callLater();
+              CoreEvents.callLater = null;
+            }
             break;
           case "onendframe":
             if(CoreEvents.onendframe!=null) CoreEvents.onendframe(null);
@@ -62,8 +69,11 @@ namespace GameEngine {
             Console.WriteLine("unknow event "+str);
             break;
         }
+        return 0;
       } catch(Exception ex) {
+        // TODO: re-throw exception ?
         Console.WriteLine(ex);
+        return 1;
       }
     }
   }

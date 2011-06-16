@@ -1,0 +1,17 @@
+home:
+  onstart: select_game
+
+select_game:
+  onone: party_one
+  ontwo: party_two
+  onthree: party_two
+  onend: home
+
+party_one:
+  onend: home
+
+party_two:
+  onend: home
+
+party_three:
+  onend: home

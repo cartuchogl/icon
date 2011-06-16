@@ -63,6 +63,10 @@ namespace GameEngine {
         Console.WriteLine( "onend" );
       });
       
+      for(int c=0;c<100000;c++) {
+        Console.WriteLine(c);
+      }
+      
       return 0;
     }
   }

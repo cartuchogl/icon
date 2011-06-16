@@ -11,17 +11,21 @@ namespace Platform
     [DllImport("__Internal"), SuppressUnmanagedCodeSecurity]
     internal static extern void setWindowTitle(string caption);
     [DllImport("__Internal"), SuppressUnmanagedCodeSecurity]
-    internal static extern void quit();
-    [DllImport("__Internal"), SuppressUnmanagedCodeSecurity]
     internal static extern int getWidth();
     [DllImport("__Internal"), SuppressUnmanagedCodeSecurity]
     internal static extern int getHeight();
     [DllImport("__Internal"), SuppressUnmanagedCodeSecurity]
     internal static extern int getTime();
     [DllImport("__Internal"), SuppressUnmanagedCodeSecurity]
+    internal static extern int swapBuffers();
+    [DllImport("__Internal"), SuppressUnmanagedCodeSecurity]
     internal static extern string getPlatform();
     [DllImport("__Internal"), SuppressUnmanagedCodeSecurity]
     internal static extern string getCpuFlags();
+    [DllImport("__Internal"), SuppressUnmanagedCodeSecurity]
+    internal static extern string checkEvents();
+    [DllImport("__Internal"), SuppressUnmanagedCodeSecurity]
+    internal static extern void setRelaunchAssembly(string assembly);
   }
   
   public static class Methods {
@@ -29,28 +33,37 @@ namespace Platform
       return NativeMethods.setWindow(caption,width,height,fullscreen);
     }
     
-    public static void quit(){
-      NativeMethods.quit();
-    }
-    
-    public static int getWidth(){
+    public static int getWidth() {
       return NativeMethods.getWidth();
     }
     
-    public static int getHeight(){
+    public static int getHeight() {
       return NativeMethods.getHeight();
     }
     
-    public static int getTime(){
+    public static int getTime() {
       return NativeMethods.getTime();
     }
     
-    public static string getPlatform(){
+    public static void swapBuffers() {
+      NativeMethods.swapBuffers();
+    }
+    
+    public static string getPlatform() {
       return NativeMethods.getPlatform();
     }
     
-    public static string getCpuFlags(){
+    public static string getCpuFlags() {
       return NativeMethods.getCpuFlags();
+    }
+    
+    public static string checkEvents() {
+      return NativeMethods.checkEvents();
+    }
+    
+    public static void setRelaunchAssembly(string assembly) {
+      Console.WriteLine("cs:"+assembly);
+      NativeMethods.setRelaunchAssembly(assembly);
     }
   }
 }

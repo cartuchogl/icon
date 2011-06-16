@@ -64,8 +64,8 @@ CoreEvents.onkeydown += def(obj,args):
 CoreEvents.onkeyup += def(obj,args):
   s = "onkeyup -> state:{0}, scancode:{1}, unicode:{2}, sym:{3}, mod:{4}"
   print s % (args['state'], args['scancode'], args['unicode'], args['sym'], args['mod'])
-  if args['scancode'] == 53:
-    Platform.Methods.quit()
+/*   if args['scancode'] == 53:
+    Platform.Methods.quit() */
 
 CoreEvents.onmousedown += def(obj,args):
   s = "onmousedown -> x:{0}, y:{1}, state: {2}, button: {3}"

@@ -16,6 +16,7 @@ Inspiration:
   - unity3d http://unity3d.com/unity/
   - love http://love2d.org/
   - shoes http://shoesrb.com/
+  - mono http://www.mono-project.com/Embedding_Mono
   - ruby http://www.ruby-lang.org/
 
 Dependencies:
@@ -107,6 +108,7 @@ Features:
 TODO:
   - Compile on linux
   * Compile on Windows
+  - Compile assemblies on windows
   - Build packages
   - Minimal package
   - Mono packaged into app

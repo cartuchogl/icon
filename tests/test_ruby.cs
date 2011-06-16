@@ -7,8 +7,8 @@ using IronRuby.Builtins;
 using IronRuby.Runtime;
 
 namespace GameEngine {
-  class TestRuby {
-    static int Main(string[] args) {
+  public class TestRuby {
+    public static int Main(string[] args) {
       var engine = IronRuby.Ruby.CreateEngine();
 
       var paths = engine.GetSearchPaths().ToList();

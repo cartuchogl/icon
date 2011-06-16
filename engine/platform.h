@@ -155,6 +155,7 @@ CALL_API void quit(void);
 CALL_API void reset(void);
 CALL_API const char *getPlatform(void);
 CALL_API const char *getCpuFlags(void);
+CALL_API void setRelaunchAssembly(char *assembly);
 }
 
 #endif

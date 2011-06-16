@@ -50,7 +50,8 @@ file 'engine/utils.o' => ['engine/utils.cpp', 'engine/utils.h']
 
 desc "Construye el binding en c# de horde"
 task :build_csharp_horde3d_binding do
-  sh "#{MONO} -target:library -out:bin/engine.dll engine/*.cs horde3d/*.cs"
+  sh "resgen /compile horde3d/Horde3D_Properties.resx"
+  sh "#{MONO} -target:library -resource:horde3d/Horde3D_Properties.resources -out:bin/engine.dll engine/*.cs horde3d/*.cs"
 end
 
 desc "Construye el API del motor c#"
