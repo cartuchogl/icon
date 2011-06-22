@@ -16,7 +16,7 @@ namespace GameEngine {
         Console.WriteLine(path);
       }
 
-      engine.ExecuteFile("ruby/test01.rb");
+      engine.ExecuteFile(System.IO.Path.Combine("ruby","test01.rb"));
 
       return 0;
     }
