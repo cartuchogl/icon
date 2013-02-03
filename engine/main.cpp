@@ -57,6 +57,7 @@ int main(int argc, char* argv[]) {
 
   while(file!=NULL) {
     filetmp = file;
+    // TODO: on relaunch memory leak
     file = NULL;
     // Inits sdl with only the video extension.
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -66,14 +67,14 @@ int main(int argc, char* argv[]) {
     printf("%dms to dotNet.\n", getTime());
     main_function (domain, filetmp, argc - 1, argv + 1);
     // Crashed when executing ruby tests
-    // mono_jit_cleanup(domain);
+    mono_jit_cleanup(domain);
     SDL_Quit();
     retval = mono_environment_exitcode_get ();
-    printf("%s\n",file);
-    file = extern_relaunch;
-    printf("%s\n",file);
-    extern_relaunch = NULL;
-    printf("%s\n",file);
+    if(extern_relaunch!=NULL) {
+      file = extern_relaunch;
+      extern_relaunch = NULL;
+      printf("%s\n",file);
+    }
   }
   return retval;
 }

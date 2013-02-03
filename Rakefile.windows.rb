@@ -49,10 +49,8 @@ rule '.o' => '.cpp' do |t|
 end
 
 file "bin\\icon.exe" => OBJ do
-  puts "xxxxxx"
   kk = OBJ.uniq.to_s.gsub("/","\\")
   puts kk
-  puts "kkkkkkk"
   sh "#{GPP} #{kk} #{SDL_LIBS} #{H3DLIB} #{H3DUTLIB} #{MONOLIB} /MD /link /SUBSYSTEM:CONSOLE /out:bin\\icon.exe"
 end
   

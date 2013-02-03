@@ -1,0 +1,5 @@
+content/*
+Lib/*
+*.o
+/Horde3D_Log.html
+/horde3d/Horde3D_Properties.resources

@@ -1394,7 +1394,7 @@ namespace Horde3DNET
 		/// The property must be of the type float.</remarks>
         /// <param name="node">handle to the node to be modified</param>
         /// <param name="param">parameter to be modified</param>
-        /// <param name="compIdx>component of the parameter to be modified</param>
+        /// <param name="compIdx">component of the parameter to be modified</param>
         /// <param name="value">new value for the specified parameter</param>        
         public static void setNodeParamF(int node, int param, int compIdx, float value)
         {
